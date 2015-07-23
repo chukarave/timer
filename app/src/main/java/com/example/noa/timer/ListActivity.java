@@ -1,9 +1,11 @@
 package com.example.noa.timer;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.TextUtils;
+
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -15,41 +17,34 @@ public class ListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        Intent intent = getIntent();
+        ArrayList<Pair> list = intent.getParcelableArrayListExtra("LIST"); // get the ArrayList
 
-      MainActivity main = new MainActivity();
+        TextView textView = new TextView(this);
+        setContentView(textView);
 
+        //Iterate over the list
+        // calculate the diff between the start time and the previous start time
+        for (int i = 0; i < list.size(); i++) {
+            long diff = 0;
+            if (i > 0)  {
+                diff = list.get(i).start - list.get(i-1).start;
+            }
 
-
-        for (int i = 0; i < main.list.size(); i++) {
-
-            long diff = main.list.get(i + 1).start - main.list.get(i).start;
-
+            //System.out.println(String.format("%s: %s", list.get(i), diff/1000));
+            textView.append(String.format("%s: %s", list.get(i), diff / 1000));
         }
 
 
-    }
 /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
-    }
+        String joined = TextUtils.join(", ", list);
+        System.out.println(joined);
+        TextView textView = new TextView(this);
+        textView.setText(joined);
+        setContentView(textView);
+*/
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
 
-}
- */
+    }
